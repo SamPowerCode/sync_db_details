@@ -1,0 +1,56 @@
+164  sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+  165  sudo chmod a+r /etc/apt/keyrings/docker.asc
+  167  echo   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" |   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  170  sudo apt install ./docker-desktop-amd64.deb 
+  171  docker run hello-world
+  172  docker pull hello-world
+  173  docker image ls
+  174  docker image ps
+  175  docker ps
+  176  docker ps -a
+  177  docker run nginx
+  178  docker run -p; 80:80 nginx
+  179  docker run -p 80:80 nginx
+  180  docker run -p 5000:80 nginx
+  182  docker run -p 5000:80 -d nginx
+  184  docker ps
+  185  docker run -p 5000:80 -d --name my_nginx nginx
+  186  docker ps
+  187  docker stop 21c8a68d2c3a
+  188  docker ps
+  189  docker ps -a
+  190  docker logs 21c8a68d2c3a
+  191  docker ps
+  192  docker ps -a
+  193  docker container prune
+  194  docker ps -a
+  195  docker run -p 5000:80 -d --name my_nginx --rm nginx
+  196  docker ps
+  197  docker stop my_nginx
+  198  docker run nginx:1.27.0-bookworm
+  199  docker image ls --digests
+  200  docker image ls
+  201  docker run nginx@sha256:42e917aaa1b5bb40dd0f6f7f4f857490ac7747d7ef73b391c774a41a8b994f15
+  202  docker run -e ABC=123 -e DEF=456 python:3.12 python -c "import os;print(os.environ)"
+  203  $ docker run --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+  204  docker run --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+  205  docker ps
+  206  docker pull
+  208  docker pull container-registry.oracle.com/database/free:latest
+  209  docker pull container-registry.oracle.com/database/free:latest-lite
+  210  docker run -itd --name theoracle -e ORACLE_PWD='password' -p 1521:1521 container-registry.oracle.com/database/free:latest
+  211  docker ps
+  212  docker stop theoracle
+  213  sudo docker run -itd --name theoracle -e ORACLE_PWD='password' -p 1521:1521 container-registry.oracle.com/database/free:latest
+  214  docker run -itd --name theoracle -e ORACLE_PWD='password' -p 1521:1521 container-registry.oracle.com/database/free:latest
+  215  docker ps
+  216  docker container purge
+  217  docker container prune
+  218  sudo docker run -itd --name theoracle -e ORACLE_PWD='password' -p 1521:1521 container-registry.oracle.com/database/free:latest
+  219  docker run -itd --name theoracle -e ORACLE_PWD='password' -p 1521:1521 container-registry.oracle.com/database/free:latest
+  220  docker ps
+  221  docker exec -it theoracle bash
+  222  docker ps
+  224  history | grep docker
+
