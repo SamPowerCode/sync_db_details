@@ -48,8 +48,16 @@ def synchronize_data():
     postgres_session = PostgresSession()
 
     try:
-        # Fetch data from Oracle
-        oracle_data = oracle_session.query(OraclePerson).all()
+        # Get the latest date from PostgreSQL
+        latest_postgres_date = postgres_session.query(PostgresPerson.last_updated).order_by(PostgresPerson.last_updated.desc()).first()
+        latest_postgres_date = latest_postgres_date[0] if latest_postgres_date else None
+
+        # Fetch data from Oracle that is newer than the latest date in PostgreSQL
+        if latest_postgres_date:
+            oracle_data = oracle_session.query(OraclePerson).filter(OraclePerson.LST_UPD > latest_postgres_date).all()
+        else:
+            oracle_data = oracle_session.query(OraclePerson).all()
+
         oracle_person_ids = [oracle_person.PER_ID for oracle_person in oracle_data]
 
         # Process in chunks of 500
