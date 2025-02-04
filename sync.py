@@ -48,46 +48,46 @@ def synchronize_data():
     postgres_session = PostgresSession()
 
     try:
-        # Fetch data from PostgreSQL
-        postgres_data = postgres_session.query(PostgresPerson).all()
-        postgres_person_ids = [pg_person.person_id for pg_person in postgres_data]
+        # Fetch data from Oracle
+        oracle_data = oracle_session.query(OraclePerson).all()
+        oracle_person_ids = [oracle_person.PER_ID for oracle_person in oracle_data]
 
         # Process in chunks of 500
         chunk_size = 500
-        for i in range(0, len(postgres_person_ids), chunk_size):
-            chunk = postgres_person_ids[i:i + chunk_size]
-            oracle_people = oracle_session.query(OraclePerson).filter(OraclePerson.PER_ID.in_(chunk)).all()
-            oracle_people_dict = {person.PER_ID: person for person in oracle_people}
+        for i in range(0, len(oracle_person_ids), chunk_size):
+            chunk = oracle_person_ids[i:i + chunk_size]
+            postgres_people = postgres_session.query(PostgresPerson).filter(PostgresPerson.person_id.in_(chunk)).all()
+            postgres_people_dict = {person.person_id: person for person in postgres_people}
 
-            for pg_person in postgres_data[i:i + chunk_size]:
-                oracle_person = oracle_people_dict.get(pg_person.person_id)
+            for oracle_person in oracle_data[i:i + chunk_size]:
+                postgres_person = postgres_people_dict.get(oracle_person.PER_ID)
 
-                if oracle_person:
-                    # Update Oracle if the PostgreSQL record is newer
-                    if pg_person.last_updated > oracle_person.LST_UPD:
-                        oracle_person.F_NM = pg_person.first_name
-                        oracle_person.L_NM = pg_person.last_name
-                        oracle_person.EM = pg_person.email
-                        oracle_person.IP = pg_person.ip_address
-                        oracle_person.LST_UPD = pg_person.last_updated
-                        oracle_session.add(oracle_person)
+                if postgres_person:
+                    # Update PostgreSQL if the Oracle record is newer
+                    if oracle_person.LST_UPD > postgres_person.last_updated:
+                        postgres_person.first_name = oracle_person.F_NM
+                        postgres_person.last_name = oracle_person.L_NM
+                        postgres_person.email = oracle_person.EM
+                        postgres_person.ip_address = oracle_person.IP
+                        postgres_person.last_updated = oracle_person.LST_UPD
+                        postgres_session.add(postgres_person)
                 else:
-                    # Insert new record into Oracle
-                    new_oracle_person = OraclePerson(
-                        PER_ID=pg_person.person_id,
-                        F_NM=pg_person.first_name,
-                        L_NM=pg_person.last_name,
-                        EM=pg_person.email,
-                        IP=pg_person.ip_address,
-                        LST_UPD=pg_person.last_updated
+                    # Insert new record into PostgreSQL
+                    new_postgres_person = PostgresPerson(
+                        person_id=oracle_person.PER_ID,
+                        first_name=oracle_person.F_NM,
+                        last_name=oracle_person.L_NM,
+                        email=oracle_person.EM,
+                        ip_address=oracle_person.IP,
+                        last_updated=oracle_person.LST_UPD
                     )
-                    oracle_session.add(new_oracle_person)
+                    postgres_session.add(new_postgres_person)
 
-        oracle_session.commit()
+        postgres_session.commit()
 
     except Exception as e:
         print(f"An error occurred: {e}")
-        oracle_session.rollback()
+        postgres_session.rollback()
     finally:
         oracle_session.close()
         postgres_session.close()
