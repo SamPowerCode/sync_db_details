@@ -8,7 +8,7 @@ Base = declarative_base()
 
 # Define the PostgreSQL model
 class PostgresPerson(Base):
-    __tablename__ = 'MOCK_DATA'
+    __tablename__ = 'mock_sql_table'
     person_id = Column(Integer, Sequence('person_id_seq'), primary_key=True)
     first_name = Column(String(50))
     last_name = Column(String(50))
@@ -17,7 +17,7 @@ class PostgresPerson(Base):
     last_updated = Column(Date)
 
 # Database connection string
-postgres_connection_string = 'postgresql+psycopg2://postgres_user:mysecretpassword@localhost:5432/postgres_db'
+postgres_connection_string = 'postgresql+psycopg2://postgres:mysecretpassword@localhost:5432/postgres'
 
 # Create engine
 engine = create_engine(postgres_connection_string)

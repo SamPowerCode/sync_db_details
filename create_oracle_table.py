@@ -11,21 +11,29 @@ connection = cx_Oracle.connect(user=username, password=password, dsn=dsn)
 cursor = connection.cursor()
 
 # Create table
+
+# PER_ID  # person_id
+# F_NM  # first_name
+# L_NM  # last_name
+# EM  # email
+# IP  # ip_address
+# LST_UPD DATE  # last_update
+
 create_table_query = """
-CREATE TABLE person (
-    person_id INT PRIMARY KEY,
-    first_name VARCHAR2(50),
-    last_name VARCHAR2(50),
-    email VARCHAR2(50),
-    ip_address VARCHAR2(20),
-    last_updated DATE
+CREATE TABLE mock_oracle_table (
+    PER_ID INT PRIMARY KEY,
+    F_NM VARCHAR2(50),
+    L_NM VARCHAR2(50),
+    EM VARCHAR2(50),
+    IP VARCHAR2(20),
+    LST_UPD DATE
 )
 """
 cursor.execute(create_table_query)
 
 # Insert dummy records
 insert_query = """
-INSERT INTO person (person_id, first_name, last_name, email, ip_address, last_updated)
+INSERT INTO mock_oracle_table (PER_ID, F_NM, L_NM, EM, IP, LST_UPD)
 VALUES (:1, :2, :3, :4, :5, :6)
 """
 
@@ -43,7 +51,7 @@ cursor.executemany(insert_query, records)
 connection.commit()
 
 # Query the records
-select_query = "SELECT * FROM person"
+select_query = "SELECT * FROM mock_oracle_table"
 cursor.execute(select_query)
 
 # Fetch and print the results

@@ -136,6 +136,7 @@ ENV/
 env.bak/
 venv.bak/
 venv_oracle_demo/
+venv_sync_db_details/
 
 # Spyder project settings
 .spyderproject

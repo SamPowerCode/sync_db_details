@@ -1,22 +1,29 @@
 from sqlalchemy import create_engine, Column, Integer, String, Date
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 Base = declarative_base()
 
 # Oracle model
 class OraclePerson(Base):
-    __tablename__ = 'person'
-    person_id = Column(Integer, primary_key=True)
-    first_name = Column(String(50))
-    last_name = Column(String(50))
-    email = Column(String(50))
-    ip_address = Column(String(20))
-    last_updated = Column(Date)
+    __tablename__ = 'mock_oracle_table'
+    PER_ID = Column(Integer, primary_key=True)
+    F_NM = Column(String(50))
+    L_NM = Column(String(50))
+    EM = Column(String(50))
+    IP = Column(String(20))
+    LST_UPD = Column(Date)
+
+# PER_ID  # person_id
+# F_NM  # first_name
+# L_NM  # last_name
+# EM  # email
+# IP  # ip_address
+# LST_UPD DATE  # last_update
 
 # PostgreSQL model
 class PostgresPerson(Base):
-    __tablename__ = 'MOCK_DATA'
+    __tablename__ = 'mock_sql_table'
     person_id = Column(Integer, primary_key=True)
     first_name = Column(String(50))
     last_name = Column(String(50))
@@ -25,7 +32,7 @@ class PostgresPerson(Base):
     last_updated = Column(Date)
 
 # Database connection strings
-oracle_connection_string = 'oracle+cx_oracle://oracle_user:password@localhost:1521/?service_name=FREEXDB'
+oracle_connection_string = 'oracle+cx_oracle://system:password@localhost:1521/?service_name=FREEXDB'
 postgres_connection_string = 'postgresql+psycopg2://postgres:mysecretpassword@localhost:5432/postgres'
 
 # Create engines
